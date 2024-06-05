@@ -1,95 +1,162 @@
-import * as React from 'react';
-import { View } from 'react-native';
-import Animated, { FadeInUp, FadeOutDown, LayoutAnimationConfig } from 'react-native-reanimated';
-import { Info } from '~/lib/icons/Info';
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
-import { Button } from '~/components/ui/button';
+import { Eye, EyeIcon, EyeOff, Facebook, MoveRight } from "lucide-react-native";
+import * as React from "react";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '~/components/ui/card';
-import { Progress } from '~/components/ui/progress';
-import { Text } from '~/components/ui/text';
-import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip';
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
+import Animated, {
+  FadeInUp,
+  FadeOutDown,
+  LayoutAnimationConfig,
+} from "react-native-reanimated";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import AppleIcon from "~/lib/icons/AppleIcon";
+import FacebookIcon from "~/lib/icons/FacebookIcon";
+import GoogleIcon from "~/lib/icons/GoogleIcon";
 
-const GITHUB_AVATAR_URI =
-  'https://i.pinimg.com/originals/ef/a2/8d/efa28d18a04e7fa40ed49eeb0ab660db.jpg';
+export default function SingUpPage() {
+  const [name, setName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [pass, setPass] = React.useState("");
+  const [securedText, setSecuredText] = React.useState(true);
 
-export default function Screen() {
-  const [progress, setProgress] = React.useState(78);
-
-  function updateProgressValue() {
-    setProgress(Math.floor(Math.random() * 100));
-  }
   return (
-    <View className='flex-1 justify-center items-center gap-5 p-6 bg-secondary/30'>
-      <Card className='w-full max-w-sm p-6 rounded-2xl'>
-        <CardHeader className='items-center'>
-          <Avatar alt="Rick Sanchez's Avatar" className='w-24 h-24'>
-            <AvatarImage source={{ uri: GITHUB_AVATAR_URI }} />
-            <AvatarFallback>
-              <Text>RS</Text>
-            </AvatarFallback>
-          </Avatar>
-          <View className='p-3' />
-          <CardTitle className='pb-2 text-center'>Rick Sanchez</CardTitle>
-          <View className='flex-row'>
-            <CardDescription className='text-base font-semibold'>Scientist</CardDescription>
-            <Tooltip delayDuration={150}>
-              <TooltipTrigger className='px-2 pb-0.5 active:opacity-50'>
-                <Info size={14} strokeWidth={2.5} className='w-4 h-4 text-foreground/70' />
-              </TooltipTrigger>
-              <TooltipContent className='py-2 px-4 shadow'>
-                <Text className='native:text-lg'>Freelance</Text>
-              </TooltipContent>
-            </Tooltip>
-          </View>
-        </CardHeader>
-        <CardContent>
-          <View className='flex-row justify-around gap-3'>
-            <View className='items-center'>
-              <Text className='text-sm text-muted-foreground'>Dimension</Text>
-              <Text className='text-xl font-semibold'>C-137</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View className="flex-1 justify-center items-center gap-5 p-8 bg-secondary/30">
+          <View className="w-full flex-1 flex flex-col justify-between items-center top-2">
+            <View className="flex-1 w-full justify-center items-center">
+              {/* HERO */}
+              <View className="items-center justify-center mb-6">
+                <Image
+                  source={require("assets/Icons/idCard.png")}
+                  className="w-44 h-44"
+                />
+                <Text className="text-4xl font-bold">Become a member!</Text>
+              </View>
+              {/* INPUTS */}
+              <View className="w-full gap-y-4">
+                <View className="w-full gap-y-2 px-2">
+                  <Label nativeID="name" className="text-zinc-400">
+                    Your name
+                  </Label>
+                  <Input
+                    placeholder="Enter your name"
+                    className="rounded-2xl focus:border-blue-400 focus:border-2 placeholder:text-zinc-300"
+                    style={{ height: 52 }}
+                    textContentType="name"
+                    value={name}
+                    onChangeText={(text) => setName(text)}
+                    aria-labelledbyledBy="inputLabel"
+                    aria-errormessage="inputError"
+                  />
+                </View>
+                <View className="w-full gap-y-2 px-2">
+                  <Label nativeID="name" className="text-zinc-400">
+                    E-mail address
+                  </Label>
+                  <Input
+                    placeholder="Enter your mail"
+                    className="rounded-2xl focus:border-blue-400 focus:border-2 placeholder:text-zinc-300"
+                    style={{ height: 52 }}
+                    value={email}
+                    textContentType="emailAddress"
+                    onChangeText={(text) => setEmail(text)}
+                    aria-labelledbyledBy="inputLabel"
+                    aria-errormessage="inputError"
+                  />
+                </View>
+                <View className="w-full gap-y-2 px-2">
+                  <Label nativeID="name" className="text-zinc-400">
+                    Password
+                  </Label>
+                  <View className="items-center flex flex-row w-full gap-x-3">
+                    <Input
+                      placeholder="Enter your password"
+                      textContentType="password"
+                      secureTextEntry={securedText}
+                      className="flex-1 rounded-2xl focus:border-blue-400 focus:border-2 w-full placeholder:text-zinc-300"
+                      style={{ height: 52 }}
+                      value={pass}
+                      onChangeText={(text) => setPass(text)}
+                      aria-labelledbyledBy="inputLabel"
+                      aria-errormessage="inputError"
+                    />
+                    <View className="">
+                      {securedText ? (
+                        <Eye
+                          onPress={() => setSecuredText(false)}
+                          color="#d4d4d8"
+                          size={32}
+                        />
+                      ) : (
+                        <EyeOff
+                          onPress={() => setSecuredText(true)}
+                          color="#60a5fa"
+                          size={32}
+                        />
+                      )}
+                    </View>
+                  </View>
+                </View>
+              </View>
+              {/* LOGIN WITH SOCIAL */}
+              <View className="mt-8 gap-y-4 flex flex-col items-center justify-center">
+                <Label nativeID="singupor" className="text-zinc-400">
+                  OR
+                </Label>
+                <View className="items-center justify-center flex flex-row gap-x-6">
+                  <Button
+                    size={"icon"}
+                    variant={"outline"}
+                    className="flex w-14 h-14 rounded-full"
+                  >
+                    <GoogleIcon />
+                  </Button>
+                  <Button
+                    size={"icon"}
+                    variant={"outline"}
+                    className="flex w-14 h-14 rounded-full"
+                  >
+                    <AppleIcon />
+                  </Button>
+                  <Button
+                    size={"icon"}
+                    variant={"outline"}
+                    className="flex w-14 h-14 rounded-full"
+                  >
+                    <FacebookIcon />
+                  </Button>
+                </View>
+              </View>
             </View>
-            <View className='items-center'>
-              <Text className='text-sm text-muted-foreground'>Age</Text>
-              <Text className='text-xl font-semibold'>70</Text>
-            </View>
-            <View className='items-center'>
-              <Text className='text-sm text-muted-foreground'>Species</Text>
-              <Text className='text-xl font-semibold'>Human</Text>
-            </View>
-          </View>
-        </CardContent>
-        <CardFooter className='flex-col gap-3 pb-0'>
-          <View className='flex-row items-center overflow-hidden'>
-            <Text className='text-sm text-muted-foreground'>Productivity:</Text>
-            <LayoutAnimationConfig skipEntering>
-              <Animated.View
-                key={progress}
-                entering={FadeInUp}
-                exiting={FadeOutDown}
-                className='w-11 items-center'
+            {/* BUTTONS */}
+            <View className="w-full px-2">
+              <Button
+                size={"lg"}
+                className="flex flex-row gap-x-2"
+                onPress={() => {}}
               >
-                <Text className='text-sm font-bold text-sky-600'>{progress}%</Text>
-              </Animated.View>
-            </LayoutAnimationConfig>
+                <Text className="text-white">Sign up</Text>
+              </Button>
+              <Button onPress={() => {}} variant={"link"}>
+                <Text className="text-blue-400">
+                  Already have an account? Sign in
+                </Text>
+              </Button>
+            </View>
           </View>
-          <Progress value={progress} className='h-2' indicatorClassName='bg-sky-600' />
-          <View />
-          <Button
-            variant='outline'
-            className='shadow shadow-foreground/5'
-            onPress={updateProgressValue}
-          >
-            <Text>Update</Text>
-          </Button>
-        </CardFooter>
-      </Card>
-    </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
