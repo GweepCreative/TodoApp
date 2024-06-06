@@ -8,6 +8,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        neonPink:'#F3C4FB',
+        pink:'#DEB5E4',
+        darkpink:'#BA68C8',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
