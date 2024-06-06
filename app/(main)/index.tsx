@@ -1,7 +1,15 @@
 import { View, Text, FlatList, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { cn } from "~/lib/utils";
+import Animated, {
+  Easing,
+  FadeInDown,
+  FadeOutDown,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -24,23 +32,35 @@ const getWeekDates = () => {
 
 export default function Main() {
   const weekDates = getWeekDates();
+  const offset = useSharedValue(0);
+  const animatedStyles = useAnimatedStyle(() => ({
+    transform: [{ translateY: offset.value }],
+  }));
+
+  useEffect(() => {
+    offset.value = withTiming(5, { duration: 10_000 });
+  }, []);
 
   return (
     <SafeAreaView className="flex-1">
-      <View className="bg-neonPink/60 flex justify-center items-center gap-4 p-4">
+      <Animated.View className="bg-neonPink/60 flex justify-center items-center gap-4 p-4">
         <Text className="text-xl font-bold">Today</Text>
-        <View className="h-24 w-full">
-          <FlatList
+        <Animated.View className="h-24 w-full">
+          <Animated.FlatList
             horizontal
             keyExtractor={(item) => item.day}
             className="w-full flex flex-row "
             data={weekDates}
-            renderItem={({ item }) => (
-              <DateCard
-                day={item.day}
-                date={item.date}
-                isToday={item.isToday}
-              />
+            renderItem={({ item, index }) => (
+              <Animated.View entering={
+                FadeInDown.duration(500+index*25).easing(Easing.ease)
+              } exiting={FadeOutDown}>
+                <DateCard
+                  day={item.day}
+                  date={item.date}
+                  isToday={item.isToday}
+                />
+              </Animated.View>
             )}
             contentContainerStyle={{
               justifyContent: "space-between",
@@ -49,8 +69,8 @@ export default function Main() {
             }}
             showsHorizontalScrollIndicator={false}
           />
-        </View>
-      </View>
+        </Animated.View>
+      </Animated.View>
     </SafeAreaView>
   );
 }
