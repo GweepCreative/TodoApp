@@ -55,7 +55,17 @@ export default function Main() {
   );
 }
 
-function DateCard({ day, date, isToday , onPress=()=>{} }) {
+function DateCard({
+  day,
+  date,
+  isToday,
+  onPress = () => {},
+}: {
+  day: string;
+  date: number;
+  isToday: boolean;
+  onPress?: () => void;
+}) {
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -64,10 +74,7 @@ function DateCard({ day, date, isToday , onPress=()=>{} }) {
       } justify-center items-center p-2 gap-2 rounded-xl m-1`}
     >
       <Text
-        className={cn(
-          "text-black text-sm text-[10px]",
-          isToday && "font-bold"
-        )}
+        className={cn("text-black text-sm text-[10px]", isToday && "font-bold")}
       >
         {day}
       </Text>
@@ -76,9 +83,7 @@ function DateCard({ day, date, isToday , onPress=()=>{} }) {
           isToday ? "bg-white" : ""
         }`}
       >
-        <Text
-          className={cn("text-black text-[10px]", isToday && "font-bold")}
-        >
+        <Text className={cn("text-black text-[10px]", isToday && "font-bold")}>
           {date}
         </Text>
       </View>
