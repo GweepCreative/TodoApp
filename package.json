@@ -11,14 +11,17 @@
     "web": "expo start -c --web"
   },
   "dependencies": {
+    "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-progress": "^1.0.3",
+    "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-navigation/native": "^6.0.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "expo": "^51.0.8",
+    "expo-linear-gradient": "~13.0.2",
     "expo-linking": "~6.3.1",
     "expo-navigation-bar": "~3.0.4",
     "expo-router": "~3.5.14",
@@ -38,8 +41,7 @@
     "tailwind-merge": "^2.2.1",
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7",
-    "zustand": "^4.4.7",
-    "expo-linear-gradient": "~13.0.2"
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -1,45 +1,26 @@
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  TouchableWithoutFeedback,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { cn } from "~/lib/utils";
 import Animated, {
   Easing,
   FadeInDown,
+  FadeInLeft,
   FadeOutDown,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
+  FadeOutLeft,
 } from "react-native-reanimated";
-
-const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-const getWeekDates = () => {
-  const today = new Date();
-  today.setDate(today.getDate() - 1); // Bugünden bir gün çıkararak dün yap
-
-  const weekDates = [];
-
-  for (let i = 0; i < 7; i++) {
-    const date = new Date(today);
-    date.setDate(today.getDate() + i);
-    const day = daysOfWeek[date.getDay()];
-    const dayOfMonth = date.getDate();
-    weekDates.push({ day, date: dayOfMonth, isToday: i === 1 });
-  }
-
-  return weekDates;
-};
-
+import CategoriesBar from "~/components/TabBars/CategoriesBar";
+import DateCard, { getWeekDates } from "~/components/DateCard";
+import { NotebookPen } from "lucide-react-native";
+import { Checkbox } from "~/components/ui/checkbox";
+import { cn } from "~/lib/utils";
 export default function Main() {
   const weekDates = getWeekDates();
-  const offset = useSharedValue(0);
-  const animatedStyles = useAnimatedStyle(() => ({
-    transform: [{ translateY: offset.value }],
-  }));
-
-  useEffect(() => {
-    offset.value = withTiming(5, { duration: 10_000 });
-  }, []);
 
   return (
     <SafeAreaView className="flex-1">
@@ -52,9 +33,12 @@ export default function Main() {
             className="w-full flex flex-row "
             data={weekDates}
             renderItem={({ item, index }) => (
-              <Animated.View entering={
-                FadeInDown.duration(500+index*25).easing(Easing.ease)
-              } exiting={FadeOutDown}>
+              <Animated.View
+                entering={FadeInDown.duration(500 + index * 25).easing(
+                  Easing.ease
+                )}
+                exiting={FadeOutDown}
+              >
                 <DateCard
                   day={item.day}
                   date={item.date}
@@ -71,42 +55,55 @@ export default function Main() {
           />
         </Animated.View>
       </Animated.View>
+      <CategoriesBar />
+
+      <FlatList
+        data={[ 3, 4, 5]}
+        renderItem={({item,index}) => (
+          <Animated.View entering={FadeInLeft.delay(400+index*25)} exiting={FadeOutLeft.delay(400+index*25)}>
+            <ToDoCard />
+          </Animated.View>
+        )}
+        keyExtractor={(_, index) => index.toString()}
+        ListEmptyComponent={() => (
+          <Animated.View className=" my-8 w-full h-full">
+            <Animated.View
+              entering={FadeInDown.duration(900)}
+              className="w-full justify-center items-center"
+            >
+              <Image source={require("assets/Icons/person.png")} />
+              <Text className="font-bold text-2xl m-8">
+                Nothing here yet...
+              </Text>
+            </Animated.View>
+          </Animated.View>
+        )}
+      />
     </SafeAreaView>
   );
 }
-
-function DateCard({
-  day,
-  date,
-  isToday,
-  onPress = () => {},
-}: {
-  day: string;
-  date: number;
-  isToday: boolean;
-  onPress?: () => void;
-}) {
+function ToDoCard() {
+  const [checked, setChecked] = React.useState(false);
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      className={`${
-        isToday ? "bg-darkpink" : "bg-pink/60"
-      } justify-center items-center p-2 gap-2 rounded-xl m-1`}
-    >
-      <Text
-        className={cn("text-black text-sm text-[10px]", isToday && "font-bold")}
-      >
-        {day}
-      </Text>
+    <TouchableWithoutFeedback onPress={() => setChecked(!checked)}>
       <View
-        className={`flex rounded-full bg-white p-2 h-8 w-8 justify-center items-center ${
-          isToday ? "bg-white" : ""
-        }`}
+        className={cn(
+          "flex flex-row rounded-xl p-4  m-2 justify-between items-center bg-yellow-500",
+          checked && "opacity-50"
+        )}
       >
-        <Text className={cn("text-black text-[10px]", isToday && "font-bold")}>
-          {date}
-        </Text>
+        <View className="flex flex-row gap-x-3 items-center justify-start">
+          <NotebookPen size={24} color={"black"} />
+          <Text className={cn(checked && "line-through")}>Read</Text>
+        </View>
+        <View className="">
+          <Checkbox
+            style={{ borderRadius: 999, padding: 4 }}
+            checked={checked}
+            onCheckedChange={setChecked}
+          />
+        </View>
       </View>
-    </TouchableOpacity>
+    </TouchableWithoutFeedback>
   );
 }
